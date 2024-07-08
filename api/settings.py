@@ -25,7 +25,7 @@ LoggerFactory.set_directory(
         "logs",
         "api"))
 # {CRITICAL: 50, FATAL:50, ERROR:40, WARNING:30, WARN:30, INFO:20, DEBUG:10, NOTSET:0}
-LoggerFactory.LEVEL = 30
+LoggerFactory.LEVEL = 20
 
 stat_logger = getLogger("stat")
 access_logger = getLogger("access")
@@ -59,7 +59,7 @@ USE_REGISTRY = get_base_config("use_registry")
 default_llm = {
     "Tongyi-Qianwen": {
         "chat_model": "qwen-plus",
-        "embedding_model": "text-embedding-v2",
+        "embedding_model": "text-embedding-v1",
         "image2text_model": "qwen-vl-max",
         "asr_model": "paraformer-realtime-8k-v1",
     },
@@ -122,7 +122,7 @@ RERANK_MDL = default_llm["BAAI"]["rerank_model"]
 ASR_MDL = default_llm[LLM_FACTORY]["asr_model"]
 IMAGE2TEXT_MDL = default_llm[LLM_FACTORY]["image2text_model"]
 
-API_KEY = LLM.get("api_key", "")
+API_KEY = "sk-ff8c*******774"
 PARSERS = LLM.get(
     "parsers",
     "naive:General,qa:Q&A,resume:Resume,manual:Manual,table:Table,paper:Paper,book:Book,laws:Laws,presentation:Presentation,picture:Picture,one:One")

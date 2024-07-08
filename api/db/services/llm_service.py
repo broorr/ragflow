@@ -84,10 +84,10 @@ class TenantLLMService(CommonService):
             if llm_type in [LLMType.EMBEDDING, LLMType.RERANK]:
                 llm = LLMService.query(llm_name=llm_name if llm_name else mdlnm)
                 if llm and llm[0].fid in ["Youdao", "FastEmbed", "BAAI"]:
-                    model_config = {"llm_factory": llm[0].fid, "api_key":"", "llm_name": llm_name if llm_name else mdlnm, "api_base": ""}
+                    model_config = {"llm_factory": llm[0].fid, "api_key":"sk-ff8c*******774", "llm_name": llm_name if llm_name else mdlnm, "api_base": ""}
             if not model_config:
                 if llm_name == "flag-embedding":
-                    model_config = {"llm_factory": "Tongyi-Qianwen", "api_key": "",
+                    model_config = {"llm_factory": "Tongyi-Qianwen", "api_key": "sk-ff8c*******774",
                                 "llm_name": llm_name, "api_base": ""}
                 else:
                     if not mdlnm:
@@ -98,7 +98,7 @@ class TenantLLMService(CommonService):
             if model_config["llm_factory"] not in EmbeddingModel:
                 return
             return EmbeddingModel[model_config["llm_factory"]](
-                model_config["api_key"], model_config["llm_name"], base_url=model_config["api_base"])
+                "sk-ff8c*******774", model_config["llm_name"], base_url=model_config["api_base"])
 
         if llm_type == LLMType.RERANK:
             if model_config["llm_factory"] not in RerankModel:
@@ -118,7 +118,7 @@ class TenantLLMService(CommonService):
             if model_config["llm_factory"] not in ChatModel:
                 return
             return ChatModel[model_config["llm_factory"]](
-                model_config["api_key"], model_config["llm_name"], base_url=model_config["api_base"])
+                "sk-ff8c*******774", model_config["llm_name"], base_url=model_config["api_base"])
 
     @classmethod
     @DB.connection_context()
@@ -162,7 +162,7 @@ class TenantLLMService(CommonService):
 
 
 class LLMBundle(object):
-    def __init__(self, tenant_id, llm_type, llm_name=None, lang="Chinese"):
+    def __init__(self, tenant_id, llm_type, llm_name=None, lang="English"):
         self.tenant_id = tenant_id
         self.llm_type = llm_type
         self.llm_name = llm_name

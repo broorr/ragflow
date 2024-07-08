@@ -30,7 +30,7 @@ import numpy as np
 import asyncio
 from api.utils.file_utils import get_home_cache_dir
 from rag.utils import num_tokens_from_string, truncate
-
+from api.settings import stat_logger
 
 class Base(ABC):
     def __init__(self, key, model_name):
@@ -58,6 +58,8 @@ class DefaultEmbedding(Base):
         ^_-
 
         """
+        stat_logger.info(f"DefaultEmbedding: {model_name}")
+        stat_logger.info(f'DefaultEmbedding: {model_name}')
         if not DefaultEmbedding._model:
             with DefaultEmbedding._model_lock:
                 if not DefaultEmbedding._model:
@@ -120,12 +122,17 @@ class BaiChuanEmbed(OpenAIEmbed):
 
 
 class QWenEmbed(Base):
-    def __init__(self, key, model_name="text_embedding_v2", **kwargs):
-        dashscope.api_key = key
+    def __init__(self, key, model_name="text_embedding_v1", **kwargs):
+        # dashscope.api_key = key
+        dashscope.api_key = "sk-ff8c*******774"
         self.model_name = model_name
+        stat_logger.info(f"QWenEmbed: {dashscope.api_key}")
+        # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+        # logging.info("QWenEmbed===")
 
     def encode(self, texts: list, batch_size=10):
         import dashscope
+        stat_logger.info(f"begin encode for QWenEmbed: {self.model_name} {dashscope.api_key}")
         try:
             res = []
             token_count = 0
@@ -136,6 +143,8 @@ class QWenEmbed(Base):
                     input=texts[i:i + batch_size],
                     text_type="document"
                 )
+                # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+                # logging.info("QWenEmbedResp===", resp)
                 embds = [[] for _ in range(len(resp["output"]["embeddings"]))]
                 for e in resp["output"]["embeddings"]:
                     embds[e["text_index"]] = e["embedding"]
@@ -143,19 +152,25 @@ class QWenEmbed(Base):
                 token_count += resp["usage"]["total_tokens"]
             return np.array(res), token_count
         except Exception as e:
+            # logging.info("QWenEmbedException===", self.model_name)
             raise Exception("Account abnormal. Please ensure it's on good standing to use QWen's "+self.model_name)
         return np.array([]), 0
 
     def encode_queries(self, text):
+        stat_logger.info(f"begin encode queries for QWenEmbed: {self.model_name} {dashscope.api_key}")
         try:
             resp = dashscope.TextEmbedding.call(
                 model=self.model_name,
                 input=text[:2048],
                 text_type="query"
             )
+            # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+            # logging.info("QWenEmbedQueryResp===", resp)
             return np.array(resp["output"]["embeddings"][0]
                             ["embedding"]), resp["usage"]["total_tokens"]
         except Exception as e:
+            # logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+            # logging.info("QWenEmbedQueryException===", self.model_name)
             raise Exception("Account abnormal. Please ensure it's on good standing to use QWen's "+self.model_name)
         return np.array([]), 0
 

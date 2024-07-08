@@ -176,7 +176,8 @@ class BaiChuanChat(Base):
 class QWenChat(Base):
     def __init__(self, key, model_name=Generation.Models.qwen_turbo, **kwargs):
         import dashscope
-        dashscope.api_key = key
+        # dashscope.api_key = key
+        dashscope.api_key = "sk-ff8c*******774"
         self.model_name = model_name
 
     def chat(self, system, history, gen_conf):

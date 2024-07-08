@@ -263,7 +263,7 @@ def init_llm_factory():
             "model_type": LLMType.CHAT.value
         }, {
             "fid": factory_infos[1]["name"],
-            "llm_name": "text-embedding-v2",
+            "llm_name": "text-embedding-v1",
             "tags": "TEXT EMBEDDING,2K",
             "max_tokens": 2048,
             "model_type": LLMType.EMBEDDING.value

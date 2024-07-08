@@ -91,7 +91,8 @@ class GptV4(Base):
 class QWenCV(Base):
     def __init__(self, key, model_name="qwen-vl-chat-v1", lang="Chinese", **kwargs):
         import dashscope
-        dashscope.api_key = key
+        # dashscope.api_key = key
+        dashscope.api_key = "sk-ff8c*******774"
         self.model_name = model_name
         self.lang = lang
 
